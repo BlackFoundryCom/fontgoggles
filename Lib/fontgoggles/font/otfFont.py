@@ -11,6 +11,12 @@ from ..misc.properties import cachedProperty
 class _OTFBaseFont(BaseFont):
 
     def _getGlyphDrawing(self, glyphName, colorLayers):
+        if "VarC" in self.ttFont:
+            from fontTools.pens.cocoaPen import CocoaPen
+            pen = CocoaPen(None)
+            location = self._currentVarLocation or {}
+            self._varcFont.drawGlyph(pen, glyphName, location)
+            return GlyphDrawing([(pen.path, None)])
         if colorLayers and "COLR" in self.ttFont:
             colorLayers = self.ttFont["COLR"].ColorLayers
             layers = colorLayers.get(glyphName)
@@ -20,6 +26,13 @@ class _OTFBaseFont(BaseFont):
                 return GlyphDrawing(drawingLayers)
         outline = self.ftFont.getOutlinePath(glyphName)
         return GlyphDrawing([(outline, None)])
+
+    @cachedProperty
+    def _varcFont(self):
+        from fontTools.ttLib import registerCustomTableClass
+        from rcjktools.ttVarCFont import TTVarCFont
+        registerCustomTableClass("VarC", "rcjktools.table_VarC", "table_VarC")
+        return TTVarCFont(self.fontPath)
 
     def varLocationChanged(self, varLocation):
         self.ftFont.setVarLocation(varLocation if varLocation else {})
