@@ -43,7 +43,7 @@ infoplist = dict(
             CFBundleTypeRole="Viewer",
         ),
     ],
-    CFBundleName="FontGoggles",
+    CFBundleName="FontGoggles-VarC",
     CFBundleIdentifier="com.github.justvanrossum.FontGoggles",
     LSMinimumSystemVersion="10.10",
     CFBundleShortVersionString=fontgoggles.__version__,
