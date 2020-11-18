@@ -83,6 +83,9 @@ class BaseFont:
         name = self.ttFont["name"]
         axes = {}
         for axis in fvar.axes:
+            if axis.flags & 0x01:
+                # Hidden axis
+                continue
             axisDict = dict(name=str(name.getName(axis.axisNameID, 3, 1)),
                             minValue=axis.minValue,
                             defaultValue=axis.defaultValue,
