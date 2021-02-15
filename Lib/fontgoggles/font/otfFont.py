@@ -32,7 +32,7 @@ class _OTFBaseFont(BaseFont):
         from fontTools.ttLib import registerCustomTableClass
         from rcjktools.ttVarCFont import TTVarCFont
         registerCustomTableClass("VarC", "rcjktools.table_VarC", "table_VarC")
-        return TTVarCFont(self.fontPath)
+        return TTVarCFont(None, ttFont=self.ttFont, hbFont=self.shaper.font)
 
     def varLocationChanged(self, varLocation):
         self.ftFont.setVarLocation(varLocation if varLocation else {})
